@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Mytodoapp2</string>
+    <string name="page_detail_activity_title">DetailPage</string>
+    <string name="page_new_activity_title">NewPage</string>
+    <string name="page_edit_activity_title">EditPage</string>
+    <string name="page_tx_title">タイトル</string>
+    <string name="page_tx_content">内容</string>
+    <string name="page_option_save">保存</string>
+    <string name="page_option_delete">削除</string>
+</resources>
