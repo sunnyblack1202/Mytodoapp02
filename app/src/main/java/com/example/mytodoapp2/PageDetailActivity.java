@@ -37,16 +37,27 @@ public class PageDetailActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
-    //戻るボタン
+    //戻るボタン　オプションメニュー save delete
     @Override
     public boolean onOptionsItemSelected (MenuItem item) {
         boolean returnVal = true;
         int itemId = item.getItemId();
-        if (itemId == android.R.id.home) {
-            finish();
-        } else {
-            returnVal = super.onOptionsItemSelected(item);
+
+        switch (itemId) {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.pageOptionSave:
+                //TODO保存処理
+                break;
+            case R.id.pageOptionDelete:
+                //TODO削除
+                break;
+            default:
+                returnVal = super.onOptionsItemSelected(item);
+                break;
         }
+
         return returnVal;
     }
 

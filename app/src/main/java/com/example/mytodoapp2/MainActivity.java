@@ -5,7 +5,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,7 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,25 +28,13 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private List<Map<String, String>> _pageList;
+    private DatabaseHelper _helper;
 
-    private static final String[] FROM = {"title"};
-    private static final int[] TO = {android.R.id.text1};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView lvPage = findViewById(R.id.lvPage);
-
-        _pageList = createPageList();
-
-        SimpleAdapter adapter = new SimpleAdapter(MainActivity.this, _pageList,
-                android.R.layout.simple_list_item_1, FROM, TO);
-
-        lvPage.setAdapter(adapter);
-
-        lvPage.setOnItemClickListener(new ListItemClickListener());
 
         //追加ボタン
         FloatingActionButton fabNew = findViewById(R.id.fabNew);
@@ -53,6 +45,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(fabintent);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        selectDb();
     }
 
     //リストの中身作り
@@ -92,5 +91,41 @@ public class MainActivity extends AppCompatActivity {
 
             startActivity(intent);
         }
+    }
+
+    public void selectDb() {
+        _helper = new DatabaseHelper(MainActivity.this);
+
+        SQLiteDatabase db = _helper.getWritableDatabase();
+
+        String[] projection = {
+                BaseColumns._ID,
+                DatabaseContract.PageList.COLUMN_NAME_TITLE,
+                DatabaseContract.PageList.COLUMN_NAME_CONTENT
+        };
+
+        Cursor cursor = db.query(
+                DatabaseContract.PageList.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        //List<String> records = new ArrayList<>();
+
+        String[] FROM = {DatabaseContract.PageList.COLUMN_NAME_TITLE};
+        int[] TO = {android.R.id.text1};
+
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(MainActivity.this,
+                android.R.layout.simple_list_item_1, cursor, FROM, TO, 0);
+
+        ListView lvPage = findViewById(R.id.lvPage);
+
+        lvPage.setAdapter(adapter);
+
+        //lvPage.setOnItemClickListener(new ListItemClickListener());
     }
 }

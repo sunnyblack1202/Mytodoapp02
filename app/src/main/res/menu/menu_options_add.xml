@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/pageOptionSave"
+        android:id="@+id/pageOptionAdd"
         app:showAsAction="ifRoom"
         android:title="@string/page_option_save"/>
 </menu>
