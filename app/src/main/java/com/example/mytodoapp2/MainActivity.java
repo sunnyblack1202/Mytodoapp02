@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //データベースから取得
     public void selectDb() {
         _helper = new DatabaseHelper(MainActivity.this);
 

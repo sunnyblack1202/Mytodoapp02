@@ -8,6 +8,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "pagememo.db";
     private static final int DATABASE_VERSION = 1;
 
+    //createする文
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + DatabaseContract.PageList.TABLE_NAME + " (" +
                     DatabaseContract.PageList._ID + " INTEGER PRIMARY KEY," +

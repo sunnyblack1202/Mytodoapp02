@@ -15,7 +15,6 @@ public class NewPageActivity extends AppCompatActivity {
 
     private EditText _etPageTitle;
     private EditText _etPageContent;
-    private int _pageId = -1;
     DatabaseHelper _helper;
 
     @Override
@@ -49,7 +48,7 @@ public class NewPageActivity extends AppCompatActivity {
 
         int itemId = item.getItemId();
         if (itemId == R.id.pageOptionAdd) {
-            //保存処理を
+            //TODO保存処理を
         } else {
             returnVal = super.onOptionsItemSelected(item);
         }
@@ -57,6 +56,7 @@ public class NewPageActivity extends AppCompatActivity {
         return returnVal;
     }
 
+    //一時的にbuttonから保存
     public void onSave(View view) {
         SQLiteDatabase db = _helper.getWritableDatabase();
 
