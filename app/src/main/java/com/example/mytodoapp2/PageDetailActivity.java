@@ -3,12 +3,16 @@ package com.example.mytodoapp2;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -16,6 +20,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class PageDetailActivity extends AppCompatActivity {
 
     private int pageId = 0;
+
+    private EditText _etPageTitle;
+    private EditText _etPageContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +32,15 @@ public class PageDetailActivity extends AppCompatActivity {
         //情報の受け取り
         Intent intent = getIntent();
 
-        //pageId = intent.getIntExtra("pageId", 0);
+        pageId = intent.getIntExtra("pageId", 0);
         String pageTitle = intent.getStringExtra("pageTitle");
         String pageContent = intent.getStringExtra("pageContent");
 
-        TextView tvPageTitle = findViewById(R.id.tvPageTitle);
-        TextView tvPageContent = findViewById(R.id.tvPageContent);
+        _etPageTitle = findViewById(R.id.etPageTitle);
+        _etPageContent = findViewById(R.id.etPageContent);
 
-        tvPageTitle.setText(pageTitle);
-        tvPageContent.setText(pageContent);
+        _etPageTitle.setText(pageTitle);
+        _etPageContent.setText(pageContent);
 
         //戻るボタン
         ActionBar actionBar = getSupportActionBar();
@@ -71,4 +78,33 @@ public class PageDetailActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_options_saveanddelete, menu);
         return true;
     }
+
+    //一時的にbuttonから保存
+    public void onSave(View view) {
+        DatabaseHelper helper = new DatabaseHelper(PageDetailActivity.this);
+
+        String pageTitle = _etPageTitle.getText().toString();
+        String pageContent = _etPageContent.getText().toString();
+
+        try(SQLiteDatabase db = helper.getWritableDatabase()) {
+
+            ContentValues cv = new ContentValues();
+            cv.put(DatabaseContract.PageList.COLUMN_NAME_TITLE, pageTitle);
+            cv.put(DatabaseContract.PageList.COLUMN_NAME_CONTENT, pageContent);
+
+            if (pageId == 0) {
+                db.insert(DatabaseContract.PageList.TABLE_NAME, null, cv);
+            } else {
+                db.update(DatabaseContract.PageList.TABLE_NAME,
+                        cv,
+                        DatabaseContract.PageList._ID + " = ?",
+                        new String[] {String.valueOf(pageId)});
+            }
+
+        }
+
+        finish();
+
+    }
+
 }

@@ -2,6 +2,7 @@ package com.example.mytodoapp2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
@@ -58,16 +59,21 @@ public class NewPageActivity extends AppCompatActivity {
 
     //一時的にbuttonから保存
     public void onSave(View view) {
-        SQLiteDatabase db = _helper.getWritableDatabase();
-
         String pageTitle = _etPageTitle.getText().toString();
         String pageContent = _etPageContent.getText().toString();
 
-        String sqlInsert = "INSERT INTO pagememos (title, content) VALUES (?, ?)";
-        SQLiteStatement stmt = db.compileStatement(sqlInsert);
-        stmt.bindString(1, pageTitle);
-        stmt.bindString(2, pageContent);
-        stmt.executeInsert();
+        try(SQLiteDatabase db = _helper.getWritableDatabase()) {
+
+            ContentValues cv = new ContentValues();
+            cv.put(DatabaseContract.PageList.COLUMN_NAME_TITLE, pageTitle);
+            cv.put(DatabaseContract.PageList.COLUMN_NAME_CONTENT, pageContent);
+
+            db.insert(DatabaseContract.PageList.TABLE_NAME, null, cv);
+
+        }
+
+        finish();
+
     }
 
 }

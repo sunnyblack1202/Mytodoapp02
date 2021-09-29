@@ -61,13 +61,13 @@ public class MainActivity extends AppCompatActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             _cursor = (Cursor) parent.getItemAtPosition(position);
 
-            //int pageId = _cursor.getInt(0);
+            int pageId = _cursor.getInt(0);
             String pageTitle = _cursor.getString(1);
             String pageContent = _cursor.getString(2);
 
             Intent intent = new Intent(MainActivity.this, PageDetailActivity.class);
 
-            //intent.putExtra("pageId", pageId);
+            intent.putExtra("pageId", pageId);
             intent.putExtra("pageTitle", pageTitle);
             intent.putExtra("pageContent", pageContent);
 
