@@ -75,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //TODO
+    //private class ListItemLongClickListener implements AdapterView.OnItemLongClickListener {
+        //@Override
+        //public void onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+        //}
+    //}
+
     //データベースから取得
     public void selectDb() {
         _helper = new DatabaseHelper(MainActivity.this);
