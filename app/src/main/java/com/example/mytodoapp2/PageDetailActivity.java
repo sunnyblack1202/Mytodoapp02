@@ -104,7 +104,19 @@ public class PageDetailActivity extends AppCompatActivity {
         }
 
         finish();
+    }
 
+    //削除
+    public void onDelete(View view) {
+        DatabaseHelper helper = new DatabaseHelper(PageDetailActivity.this);
+
+        try (SQLiteDatabase db = helper.getWritableDatabase()){
+            db.delete(DatabaseContract.PageList.TABLE_NAME,
+                    DatabaseContract.PageList._ID + " = ? ",
+                    new String[] {String.valueOf(pageId)});
+        }
+
+        finish();
     }
 
 }
