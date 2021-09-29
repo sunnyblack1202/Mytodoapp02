@@ -54,14 +54,14 @@ public class PageDetailActivity extends AppCompatActivity {
         int itemId = item.getItemId();
 
         switch (itemId) {
-            case android.R.id.home:
+            case android.R.id.home: //戻る
                 finish();
                 break;
-            case R.id.pageOptionSave:
-                //TODO保存処理
+            case R.id.pageOptionSave: //保存
+                save();
                 break;
-            case R.id.pageOptionDelete:
-                //TODO削除
+            case R.id.pageOptionDelete: //削除
+                delete();
                 break;
             default:
                 returnVal = super.onOptionsItemSelected(item);
@@ -79,8 +79,8 @@ public class PageDetailActivity extends AppCompatActivity {
         return true;
     }
 
-    //一時的にbuttonから保存
-    public void onSave(View view) {
+    //保存
+    public void save() {
         DatabaseHelper helper = new DatabaseHelper(PageDetailActivity.this);
 
         String pageTitle = _etPageTitle.getText().toString();
@@ -100,14 +100,12 @@ public class PageDetailActivity extends AppCompatActivity {
                         DatabaseContract.PageList._ID + " = ?",
                         new String[] {String.valueOf(pageId)});
             }
-
         }
-
         finish();
     }
 
     //削除
-    public void onDelete(View view) {
+    public void delete() {
         DatabaseHelper helper = new DatabaseHelper(PageDetailActivity.this);
 
         try (SQLiteDatabase db = helper.getWritableDatabase()){
@@ -115,8 +113,6 @@ public class PageDetailActivity extends AppCompatActivity {
                     DatabaseContract.PageList._ID + " = ? ",
                     new String[] {String.valueOf(pageId)});
         }
-
         finish();
     }
-
 }

@@ -49,7 +49,7 @@ public class NewPageActivity extends AppCompatActivity {
 
         int itemId = item.getItemId();
         if (itemId == R.id.pageOptionAdd) {
-            //TODO保存処理を
+            save();
         } else {
             returnVal = super.onOptionsItemSelected(item);
         }
@@ -57,8 +57,8 @@ public class NewPageActivity extends AppCompatActivity {
         return returnVal;
     }
 
-    //一時的にbuttonから保存
-    public void onSave(View view) {
+    //保存
+    public void save() {
         String pageTitle = _etPageTitle.getText().toString();
         String pageContent = _etPageContent.getText().toString();
 
@@ -69,11 +69,7 @@ public class NewPageActivity extends AppCompatActivity {
             cv.put(DatabaseContract.PageList.COLUMN_NAME_CONTENT, pageContent);
 
             db.insert(DatabaseContract.PageList.TABLE_NAME, null, cv);
-
         }
-
         finish();
-
     }
-
 }
