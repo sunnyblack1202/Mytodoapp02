@@ -15,6 +15,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class PageDetailActivity extends AppCompatActivity {
 
+    private int pageId = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +25,7 @@ public class PageDetailActivity extends AppCompatActivity {
         //情報の受け取り
         Intent intent = getIntent();
 
+        //pageId = intent.getIntExtra("pageId", 0);
         String pageTitle = intent.getStringExtra("pageTitle");
         String pageContent = intent.getStringExtra("pageContent");
 

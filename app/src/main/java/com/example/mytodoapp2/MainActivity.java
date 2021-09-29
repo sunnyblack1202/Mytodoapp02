@@ -29,6 +29,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     private DatabaseHelper _helper;
+    private Cursor _cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,38 +55,19 @@ public class MainActivity extends AppCompatActivity {
         selectDb();
     }
 
-    //リストの中身作り
-    private List<Map<String, String>> createPageList() {
-        List<Map<String, String>> pageList = new ArrayList<>();
-
-        Map<String, String> page = new HashMap<>();
-        page.put("title", "あかさたな");
-        page.put("content", "あいうえおかきくけこさしすせそたちつてとなにぬねの");
-        pageList.add(page);
-
-        page = new HashMap<>();
-        page.put("title", "はまやらわ");
-        page.put("content","はひふえほまみむめもやゆよらりるれろわをん");
-        pageList.add(page);
-
-        page = new HashMap<>();
-        page.put("title", "やゆよ");
-        page.put("content","よ");
-        pageList.add(page);
-
-        return pageList;
-    }
-
     //PageDetailActivityへ遷移
     private class ListItemClickListener implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Map<String, String> item = (Map<String, String>) parent.getItemAtPosition(position);
+            _cursor = (Cursor) parent.getItemAtPosition(position);
 
-            String pageTitle = item.get("title");
-            String pageContent = item.get("content");
+            //int pageId = _cursor.getInt(0);
+            String pageTitle = _cursor.getString(1);
+            String pageContent = _cursor.getString(2);
 
             Intent intent = new Intent(MainActivity.this, PageDetailActivity.class);
+
+            //intent.putExtra("pageId", pageId);
             intent.putExtra("pageTitle", pageTitle);
             intent.putExtra("pageContent", pageContent);
 
@@ -100,12 +82,12 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDatabase db = _helper.getWritableDatabase();
 
         String[] projection = {
-                BaseColumns._ID,
+                DatabaseContract.PageList._ID,
                 DatabaseContract.PageList.COLUMN_NAME_TITLE,
                 DatabaseContract.PageList.COLUMN_NAME_CONTENT
         };
 
-        Cursor cursor = db.query(
+        _cursor = db.query(
                 DatabaseContract.PageList.TABLE_NAME,
                 projection,
                 null,
@@ -115,18 +97,16 @@ public class MainActivity extends AppCompatActivity {
                 null
         );
 
-        //List<String> records = new ArrayList<>();
-
         String[] FROM = {DatabaseContract.PageList.COLUMN_NAME_TITLE};
         int[] TO = {android.R.id.text1};
 
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(MainActivity.this,
-                android.R.layout.simple_list_item_1, cursor, FROM, TO, 0);
+                android.R.layout.simple_list_item_1, _cursor, FROM, TO, 0);
 
         ListView lvPage = findViewById(R.id.lvPage);
 
         lvPage.setAdapter(adapter);
 
-        //lvPage.setOnItemClickListener(new ListItemClickListener());
+        lvPage.setOnItemClickListener(new ListItemClickListener());
     }
 }
