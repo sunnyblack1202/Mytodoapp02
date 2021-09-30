@@ -104,6 +104,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
             DeleteConfirmDialogFragment dialogFragment = new DeleteConfirmDialogFragment();
+
+            _cursor = (Cursor) parent.getItemAtPosition(position);
+            int pageId = _cursor.getInt(0);
+            String pageTitle = _cursor.getString(1);
+
+            Bundle args = new Bundle();
+            args.putString("pageTitle", pageTitle);
+            args.putInt("pageId", pageId);
+            dialogFragment.setArguments(args);
+
             dialogFragment.show(getSupportFragmentManager(), "DeleteConfirmDialogFragment");
             return true;
         }

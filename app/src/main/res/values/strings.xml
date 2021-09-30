@@ -8,7 +8,7 @@
     <string name="page_option_save">保存</string>
     <string name="page_option_delete">削除</string>
     <string name="dialog_title_delete">確認</string>
-    <string name="dialog_msg_delete">選択された項目を削除します。よろしいですか。</string>
+    <string name="dialog_msg_delete">を削除します。よろしいですか。</string>
     <string name="dialog_btn_ok">削除</string>
     <string name="dialog_btn_ng">キャンセル</string>
     <string name="dialog_ok_delete_toast">削除しました</string>
