@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //リスト表示
     @Override
     protected void onResume() {
         super.onResume();
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         selectDb();
     }
 
-    //データベースから取得
+    //データベースから取得 リスト設定
     public void selectDb() {
         _helper = new DatabaseHelper(MainActivity.this);
 

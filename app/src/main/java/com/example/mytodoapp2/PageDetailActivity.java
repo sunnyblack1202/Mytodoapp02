@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
@@ -19,7 +20,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class PageDetailActivity extends AppCompatActivity {
 
-    private int pageId = 0;
+    private int _pageId = -1;
+    private String _pageTitle;
 
     private EditText _etPageTitle;
     private EditText _etPageContent;
@@ -32,14 +34,14 @@ public class PageDetailActivity extends AppCompatActivity {
         //情報の受け取り
         Intent intent = getIntent();
 
-        pageId = intent.getIntExtra("pageId", 0);
-        String pageTitle = intent.getStringExtra("pageTitle");
+        _pageId = intent.getIntExtra("pageId", 0);
+        _pageTitle = intent.getStringExtra("pageTitle");
         String pageContent = intent.getStringExtra("pageContent");
 
         _etPageTitle = findViewById(R.id.etPageTitle);
         _etPageContent = findViewById(R.id.etPageContent);
 
-        _etPageTitle.setText(pageTitle);
+        _etPageTitle.setText(_pageTitle);
         _etPageContent.setText(pageContent);
 
         //戻るボタン
@@ -61,7 +63,7 @@ public class PageDetailActivity extends AppCompatActivity {
                 save();
                 break;
             case R.id.pageOptionDelete: //削除
-                delete();
+                deleteClick();
                 break;
             default:
                 returnVal = super.onOptionsItemSelected(item);
@@ -92,27 +94,27 @@ public class PageDetailActivity extends AppCompatActivity {
             cv.put(DatabaseContract.PageList.COLUMN_NAME_TITLE, pageTitle);
             cv.put(DatabaseContract.PageList.COLUMN_NAME_CONTENT, pageContent);
 
-            if (pageId == 0) {
+            if (_pageId == 0) {
                 db.insert(DatabaseContract.PageList.TABLE_NAME, null, cv);
             } else {
                 db.update(DatabaseContract.PageList.TABLE_NAME,
                         cv,
                         DatabaseContract.PageList._ID + " = ?",
-                        new String[] {String.valueOf(pageId)});
+                        new String[] {String.valueOf(_pageId)});
             }
         }
         finish();
     }
 
     //削除
-    public void delete() {
-        DatabaseHelper helper = new DatabaseHelper(PageDetailActivity.this);
+    public void deleteClick() {
+        DeleteConfirmDialogFragment dialogFragment = new DeleteConfirmDialogFragment();
 
-        try (SQLiteDatabase db = helper.getWritableDatabase()){
-            db.delete(DatabaseContract.PageList.TABLE_NAME,
-                    DatabaseContract.PageList._ID + " = ? ",
-                    new String[] {String.valueOf(pageId)});
-        }
-        finish();
+        Bundle args = new Bundle();
+        args.putString("pageTitle", _pageTitle);
+        args.putInt("pageId", _pageId);
+        dialogFragment.setArguments(args);
+
+        dialogFragment.show(getSupportFragmentManager(), "DeleteConfirmDialogFragment");
     }
 }

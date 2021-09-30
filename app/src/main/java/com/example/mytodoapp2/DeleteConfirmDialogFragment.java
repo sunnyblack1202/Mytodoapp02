@@ -1,7 +1,9 @@
 package com.example.mytodoapp2;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -38,9 +40,8 @@ public class DeleteConfirmDialogFragment extends DialogFragment {
 
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
-                    //TODO
-                    // 削除
-                    msg = getString(R.string.dialog_ok_delete_toast);
+                    delete();
+                    msg = _pageTitle + getString(R.string.dialog_ok_delete_toast);
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
                     //TODO
@@ -50,6 +51,19 @@ public class DeleteConfirmDialogFragment extends DialogFragment {
             }
 
             Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    //削除
+    public void delete() {
+        Activity parentActivity = getActivity();
+
+        DatabaseHelper helper = new DatabaseHelper(parentActivity);
+
+        try (SQLiteDatabase db = helper.getWritableDatabase()){
+            db.delete(DatabaseContract.PageList.TABLE_NAME,
+                    DatabaseContract.PageList._ID + " = ? ",
+                    new String[] {String.valueOf(_pageId)});
         }
     }
 }
