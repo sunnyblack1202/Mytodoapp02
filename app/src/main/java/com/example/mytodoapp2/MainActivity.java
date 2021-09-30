@@ -1,30 +1,17 @@
 package com.example.mytodoapp2;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.provider.BaseColumns;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,34 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
         selectDb();
     }
-
-    //PageDetailActivityへ遷移
-    private class ListItemClickListener implements AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            _cursor = (Cursor) parent.getItemAtPosition(position);
-
-            int pageId = _cursor.getInt(0);
-            String pageTitle = _cursor.getString(1);
-            String pageContent = _cursor.getString(2);
-
-            Intent intent = new Intent(MainActivity.this, PageDetailActivity.class);
-
-            intent.putExtra("pageId", pageId);
-            intent.putExtra("pageTitle", pageTitle);
-            intent.putExtra("pageContent", pageContent);
-
-            startActivity(intent);
-        }
-    }
-
-    //TODO
-    //private class ListItemLongClickListener implements AdapterView.OnItemLongClickListener {
-        //@Override
-        //public void onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-        //}
-    //}
 
     //データベースから取得
     public void selectDb() {
@@ -116,5 +75,37 @@ public class MainActivity extends AppCompatActivity {
         lvPage.setAdapter(adapter);
 
         lvPage.setOnItemClickListener(new ListItemClickListener());
+
+        lvPage.setOnItemLongClickListener(new ListItemLongClickListener());
+    }
+
+    //PageDetailActivityへ遷移
+    private class ListItemClickListener implements AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            _cursor = (Cursor) parent.getItemAtPosition(position);
+
+            int pageId = _cursor.getInt(0);
+            String pageTitle = _cursor.getString(1);
+            String pageContent = _cursor.getString(2);
+
+            Intent intent = new Intent(MainActivity.this, PageDetailActivity.class);
+
+            intent.putExtra("pageId", pageId);
+            intent.putExtra("pageTitle", pageTitle);
+            intent.putExtra("pageContent", pageContent);
+
+            startActivity(intent);
+        }
+    }
+
+    //長押しでダイアログを
+    private class ListItemLongClickListener implements AdapterView.OnItemLongClickListener {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            DeleteConfirmDialogFragment dialogFragment = new DeleteConfirmDialogFragment();
+            dialogFragment.show(getSupportFragmentManager(), "DeleteConfirmDialogFragment");
+            return true;
+        }
     }
 }
