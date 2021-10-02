@@ -1,15 +1,19 @@
 package com.example.mytodoapp2;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import java.text.DateFormat;
@@ -22,6 +26,9 @@ public class NewPageActivity extends AppCompatActivity {
     private EditText _etPageContent;
     DatabaseHelper _helper;
 
+    InputMethodManager inputMethodManager;
+    private ConstraintLayout newLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +38,10 @@ public class NewPageActivity extends AppCompatActivity {
 
         _etPageTitle = findViewById(R.id.etPageTitle);
         _etPageContent = findViewById(R.id.etPageContent);
+
+        //フォーカスを外す
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        newLayout = findViewById(R.id.new_layout);
     }
 
     @Override
@@ -82,5 +93,14 @@ public class NewPageActivity extends AppCompatActivity {
             db.insert(DatabaseContract.PageList.TABLE_NAME, null, cv);
         }
         finish();
+    }
+
+    //背景タップ
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        inputMethodManager.hideSoftInputFromWindow(newLayout.getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+        newLayout.requestFocus();
+        return true;
     }
 }

@@ -2,8 +2,10 @@ package com.example.mytodoapp2;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,11 +14,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,6 +32,9 @@ public class PageDetailActivity extends AppCompatActivity {
 
     private EditText _etPageTitle;
     private EditText _etPageContent;
+
+    InputMethodManager inputMethodManager;
+    private ConstraintLayout detailLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,9 @@ public class PageDetailActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        //フォーカスを外す
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        detailLayout = findViewById(R.id.detail_layout);
     }
 
     //戻るボタン　オプションメニュー save delete
@@ -130,5 +139,14 @@ public class PageDetailActivity extends AppCompatActivity {
         dialogFragment.setArguments(args);
 
         dialogFragment.show(getSupportFragmentManager(), "DeleteConfirmDialogFragment");
+    }
+
+    //背景タップ
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        inputMethodManager.hideSoftInputFromWindow(detailLayout.getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+        detailLayout.requestFocus();
+        return true;
     }
 }
