@@ -18,6 +18,10 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class PageDetailActivity extends AppCompatActivity {
 
     private int _pageId = -1;
@@ -35,18 +39,22 @@ public class PageDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         _pageId = intent.getIntExtra("pageId", 0);
+        String updatedtime = intent.getStringExtra("updatedtime"); //更新時間
         _pageTitle = intent.getStringExtra("pageTitle");
         String pageContent = intent.getStringExtra("pageContent");
 
+        TextView tvUpdatedtime = findViewById(R.id.tvlastupdated);
         _etPageTitle = findViewById(R.id.etPageTitle);
         _etPageContent = findViewById(R.id.etPageContent);
 
+        tvUpdatedtime.setText(updatedtime);
         _etPageTitle.setText(_pageTitle);
         _etPageContent.setText(pageContent);
 
         //戻るボタン
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
     }
 
     //戻るボタン　オプションメニュー save delete
@@ -84,13 +92,19 @@ public class PageDetailActivity extends AppCompatActivity {
     //保存
     public void save() {
         DatabaseHelper helper = new DatabaseHelper(PageDetailActivity.this);
+        //時間
+        DateFormat df = new SimpleDateFormat("YYYY/MM/dd HH:mm");
+        Date date = new Date(System.currentTimeMillis());
+        String updatedtime = df.format(date);
 
+        //テキスト
         String pageTitle = _etPageTitle.getText().toString();
         String pageContent = _etPageContent.getText().toString();
 
         try(SQLiteDatabase db = helper.getWritableDatabase()) {
 
             ContentValues cv = new ContentValues();
+            cv.put(DatabaseContract.PageList.COLUMN_DATE, updatedtime);
             cv.put(DatabaseContract.PageList.COLUMN_NAME_TITLE, pageTitle);
             cv.put(DatabaseContract.PageList.COLUMN_NAME_CONTENT, pageContent);
 

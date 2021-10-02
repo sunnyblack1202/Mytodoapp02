@@ -6,12 +6,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "pagememo.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     //createする文
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + DatabaseContract.PageList.TABLE_NAME + " (" +
                     DatabaseContract.PageList._ID + " INTEGER PRIMARY KEY," +
+                    DatabaseContract.PageList.COLUMN_DATE + " TEXT," +
                     DatabaseContract.PageList.COLUMN_NAME_TITLE + " TEXT," +
                     DatabaseContract.PageList.COLUMN_NAME_CONTENT + " TEXT)";
 

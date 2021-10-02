@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         String[] projection = {
                 DatabaseContract.PageList._ID,
+                DatabaseContract.PageList.COLUMN_DATE,
                 DatabaseContract.PageList.COLUMN_NAME_TITLE,
                 DatabaseContract.PageList.COLUMN_NAME_CONTENT
         };
@@ -87,12 +88,14 @@ public class MainActivity extends AppCompatActivity {
             _cursor = (Cursor) parent.getItemAtPosition(position);
 
             int pageId = _cursor.getInt(0);
-            String pageTitle = _cursor.getString(1);
-            String pageContent = _cursor.getString(2);
+            String  updatedtime = _cursor.getString(1);
+            String pageTitle = _cursor.getString(2);
+            String pageContent = _cursor.getString(3);
 
             Intent intent = new Intent(MainActivity.this, PageDetailActivity.class);
 
             intent.putExtra("pageId", pageId);
+            intent.putExtra("updatedtime", updatedtime);
             intent.putExtra("pageTitle", pageTitle);
             intent.putExtra("pageContent", pageContent);
 

@@ -12,6 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class NewPageActivity extends AppCompatActivity {
 
     private EditText _etPageTitle;
@@ -59,12 +63,19 @@ public class NewPageActivity extends AppCompatActivity {
 
     //保存
     public void save() {
+        //時間
+        DateFormat df = new SimpleDateFormat("YYYY/MM/dd HH:mm");
+        Date date = new Date(System.currentTimeMillis());
+        String updatedtime = df.format(date);
+
+        //テキスト
         String pageTitle = _etPageTitle.getText().toString();
         String pageContent = _etPageContent.getText().toString();
 
         try(SQLiteDatabase db = _helper.getWritableDatabase()) {
 
             ContentValues cv = new ContentValues();
+            cv.put(DatabaseContract.PageList.COLUMN_DATE, updatedtime);
             cv.put(DatabaseContract.PageList.COLUMN_NAME_TITLE, pageTitle);
             cv.put(DatabaseContract.PageList.COLUMN_NAME_CONTENT, pageContent);
 
