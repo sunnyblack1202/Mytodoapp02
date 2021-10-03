@@ -133,9 +133,14 @@ public class PageDetailActivity extends AppCompatActivity {
     public void deleteClick() {
         DeleteConfirmDialogFragment dialogFragment = new DeleteConfirmDialogFragment();
 
+        int detail = -5;
+
         Bundle args = new Bundle();
         args.putString("pageTitle", _pageTitle);
         args.putInt("pageId", _pageId);
+
+        args.putInt("activity", detail);
+
         dialogFragment.setArguments(args);
 
         dialogFragment.show(getSupportFragmentManager(), "DeleteConfirmDialogFragment");

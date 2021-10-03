@@ -111,11 +111,16 @@ public class MainActivity extends AppCompatActivity {
 
             _cursor = (Cursor) parent.getItemAtPosition(position);
             int pageId = _cursor.getInt(0);
-            String pageTitle = _cursor.getString(1);
+            String pageTitle = _cursor.getString(2);
+
+            int main = -3;
 
             Bundle args = new Bundle();
             args.putString("pageTitle", pageTitle);
             args.putInt("pageId", pageId);
+
+            args.putInt("activity", main);
+
             dialogFragment.setArguments(args);
 
             dialogFragment.show(getSupportFragmentManager(), "DeleteConfirmDialogFragment");

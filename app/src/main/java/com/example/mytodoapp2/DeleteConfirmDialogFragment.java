@@ -14,11 +14,17 @@ public class DeleteConfirmDialogFragment extends DialogFragment {
 
     String _pageTitle;
     int _pageId;
+    int _activity;
+
+    Activity _parentActivity;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         _pageTitle = getArguments().getString("pageTitle", "");
         _pageId = getArguments().getInt("pageId", -1);
+
+        _activity = getArguments().getInt("activity", 0);
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -42,6 +48,13 @@ public class DeleteConfirmDialogFragment extends DialogFragment {
                 case DialogInterface.BUTTON_POSITIVE:
                     delete();
                     msg = _pageTitle + getString(R.string.dialog_ok_delete_toast);
+
+                    if (_activity == -5){
+                        _parentActivity.finish();
+                    } else if(_activity == -3) {
+                       //_parentActivity.
+                    }
+
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
                     //TODO
@@ -56,9 +69,9 @@ public class DeleteConfirmDialogFragment extends DialogFragment {
 
     //削除
     public void delete() {
-        Activity parentActivity = getActivity();
+        _parentActivity = getActivity();
 
-        DatabaseHelper helper = new DatabaseHelper(parentActivity);
+        DatabaseHelper helper = new DatabaseHelper(_parentActivity);
 
         try (SQLiteDatabase db = helper.getWritableDatabase()){
             db.delete(DatabaseContract.PageList.TABLE_NAME,
